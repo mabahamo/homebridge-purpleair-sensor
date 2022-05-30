@@ -100,8 +100,8 @@ class PurpleAirSensor implements AccessoryPlugin {
   }
 
   async update() {
-    var url = 'https://www.purpleair.com/json';
-    var usesLocalSensor = false
+    let url = 'https://www.purpleair.com/json';
+    let usesLocalSensor = false
     const axiosInstance = axios.create();
 
     if (this.localIPAddress !== undefined) {
