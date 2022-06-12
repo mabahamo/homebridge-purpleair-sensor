@@ -26,8 +26,16 @@ function parseRemotePurpleAirJson(data, averages?: string, conversion?: string) 
 
 function parseLocalPurpleAirJson(data, averages?: string, conversion?: string) {
   const conv = conversion ?? 'None';
-  const pm25 = parseFloat(data.pm2_5_atm);
-  const pm25Cf1 = parseFloat(data.pm2_5_cf_1);
+  let pm25: number;
+  let pm25Cf1: number;
+  if (data.pm2_5_atm_b) {
+    //if sensor has two channels, average the value between them
+    pm25 = (parseFloat(data.pm2_5_atm) + parseFloat(data.pm2_5_atm_b))/2;
+    pm25Cf1 = (parseFloat(data.pm2_5_cf_1) + parseFloat(data.pm2_5_cf_1_b))/2;
+  } else {
+    pm25 = parseFloat(data.pm2_5_atm);
+    pm25Cf1 = parseFloat(data.pm2_5_cf_1);
+  }
   const humidity = parseFloat(data.current_humidity);
   const sensor = data.Id;
   return new SensorReading(sensor, pm25, pm25Cf1, humidity, null, conv);
